@@ -1,0 +1,136 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  font-family: sans-serif;
+  padding: 2rem;
+}
+
+.container {
+  text-align: center;
+  padding: 20px;
+  width: 35%;
+  border: 1px solid yellow;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+form input {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border: 2px solid #ccc;
+  box-sizing: border-box;
+  border: 2px solid #007bff;
+}
+
+form button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+form button:hover {
+  opacity: 0.8;
+}
+
+.task-list {
+  list-style: none;
+  max-height: calc(100vh - 250px);
+  overflow-y: auto;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.task-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.task-list li span {
+  flex: 1;
+}
+
+.task-list li button {
+  margin-left: 10px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.sort-container {
+  margin-bottom: 20px;
+}
+
+.sort-container button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  margin-left: 10px;
+
+}
+
+.sort-container button:hover {
+  opacity: 0.8;
+}
+
+input,
+button,
+span {
+  font-size: 24px;
+}
+
+.no-tasks-placeholder {
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+  text-align: center;
+  color: #000;
+  opacity: 1;
+  animation: fadeInOut 1.5s ease-in-out infinite;
+  transition: all 30ms ease-in;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.highlight {
+  border: 2px solid red;
+  box-shadow: 0px 0px 4px red;
+}
