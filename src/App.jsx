@@ -1,38 +1,33 @@
-import React, { useState } from "react";
-import "./App.css";
+import { useEffect, useState } from "react";
+import { collection, addDoc, getDocs, orderBy, query } from "firebase/firestore";
+import db from "../firebaseConfig";
+import "./App.scss";
 
 function App() {
   const [tasks, setTasks] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [sortDirection, setSortDirection] = useState("asc");
-  const [highlightInput, setHighlightInput] = useState(false);
+  const [task, setTask] = useState({ text: '' })
+  const [newTask, setNewTask] = useState('')
+
+  useEffect(() => {
+    const getData = async () => {
+      const querySnapshot = await getDocs(query(collection(db, "tasks"), orderBy("date", "desc")));
+      setTasks(querySnapshot.docs.map((doc) => doc.data()))
+    }
+
+    getData()
+  }, [newTask])
 
   const handleInputChange = (event) => {
-    setHighlightInput(false);
-    setInputValue(event.target.value);
+    const randomNumber = Math.random() * 1000000000
+    setTask({ id: randomNumber, text: event.target.value, date: new Date() });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (/^[a-zA-Z\s]+$/.test(inputValue)) {
-
-      const newTask = {
-        id: Date.now(),
-        text: inputValue,
-      };
-
-      if (tasks.filter(task => task.text.toLowerCase() === newTask.text.toLowerCase()).length > 0) {
-        setHighlightInput(true);
-        alert("This task already exists!");
-        return;
-      }
-
-      setHighlightInput(false);
-      setTasks([...tasks, newTask]);
-      setInputValue("");
-    } else {
-      alert("Please enter a valid task name (letters and spaces only).");
-      setInputValue("");
+    if (task.text) {
+      setNewTask(task)
+      await addDoc(collection(db, "tasks"), task);
+      setTask({ text: '' })
     }
   };
 
@@ -41,19 +36,6 @@ function App() {
     setTasks(tasks.filter((task) => task.id !== taskId));
   };
 
-  const handleSort = () => {
-    const sortedTasks = [...tasks].sort((a, b) => {
-      if (a.text < b.text) {
-        return sortDirection === "asc" ? -1 : 1;
-      }
-      if (a.text > b.text) {
-        return sortDirection === "asc" ? 1 : -1;
-      }
-      return 0;
-    });
-    setTasks(sortedTasks);
-    setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-  };
 
   return (
     <div className="App">
@@ -62,35 +44,20 @@ function App() {
           <input
             type="text"
             placeholder="Enter task"
-            value={inputValue}
+            value={task.text}
             onChange={handleInputChange}
-            pattern="^[^0-9]*$"
             maxLength={20}
 
-            className={highlightInput ? "highlight" : ""}
           />
           <button type="submit">Add</button>
         </form>
-        {tasks.length > 0 ? <div className="sort-container">
-          <button onClick={handleSort}>
-            {sortDirection === "asc" ? "Sort Z-A" : "Sort A-Z"}
-          </button>
-        </div> : null}
         <ul className="task-list">
-          {tasks.length > 0 ? (
-            <ul className="task-list">
-              {tasks.map((task) => (
-                <li key={task.id}>
-                  <span>{task.text}</span>
-                  <button onClick={() => handleDelete(task.id)}>Delete</button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="no-tasks-placeholder">
-              <p >You have no tasks yet.</p>
-            </div>
-          )}
+          {tasks.map((task) => (
+            <li key={task.date}>
+              <span>{task.text}</span>
+              <button onClick={() => handleDelete(task.id)}>Delete</button>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
