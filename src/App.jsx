@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, addDoc, getDocs, orderBy, query } from "firebase/firestore";
+import { collection, addDoc, getDocs, orderBy, query, } from "firebase/firestore";
 import db from "../firebaseConfig";
 import "./App.scss";
 
@@ -18,7 +18,7 @@ function App() {
   }, [newTask])
 
   const handleInputChange = (event) => {
-    const randomNumber = Math.random() * 1000000000
+    const randomNumber = Math.floor(Math.random() * 1000000000)
     setTask({ id: randomNumber, text: event.target.value, date: new Date() });
   };
 
@@ -30,12 +30,6 @@ function App() {
       setTask({ text: '' })
     }
   };
-
-
-  const handleDelete = (taskId) => {
-    setTasks(tasks.filter((task) => task.id !== taskId));
-  };
-
 
   return (
     <div className="App">
@@ -55,7 +49,6 @@ function App() {
           {tasks.map((task) => (
             <li key={task.date}>
               <span>{task.text}</span>
-              <button onClick={() => handleDelete(task.id)}>Delete</button>
             </li>
           ))}
         </ul>
